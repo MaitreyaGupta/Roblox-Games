@@ -1,0 +1,48 @@
+local Tool = script.Parent
+local Cooldown = false 
+local CDTime = 4
+local Damage = 25
+
+
+Tool.RemoteEvent.OnServerEvent:Connect(function(Player, Mouse)
+	if Cooldown then return end 
+
+	spawn(function()
+		Cooldown = true 
+		wait(CDTime)
+		Cooldown = false 
+	end)
+
+	local Fireball = game.ReplicatedStorage.Fireball:Clone()
+	Fireball.Parent = workspace
+	local pos = Player.Character.Head.Position + CFrame.new(Player.Character.Head.Position,Mouse.p).lookVector * 1 
+	Fireball.CFrame = CFrame.new(pos,Mouse.p)
+	Fireball.CanCollide = false 
+	Fireball:SetNetworkOwner(Player)
+	local BodyVelocity = Instance.new("BodyVelocity",Fireball)
+	BodyVelocity.Velocity = Mouse.lookVector * 130
+	BodyVelocity.MaxForce = Vector3.new(1e8,1e8,1e8)
+	Tool.Sound:Play()
+	game.Debris:AddItem(Fireball,3.5)
+
+	--Part
+	Fireball.Touched:Connect(function(hit)
+		if hit and not hit.Parent:FindFirstChild("Humanoid") and hit.CanCollide == true then
+			Tool.ExplosionSound:Play()
+			Fireball:Destroy()
+
+		end
+	end)
+
+	--Humanoid
+	Fireball.Touched:Connect(function(hit)
+		if hit.Parent == Player.Character then return end
+		if hit and hit.Parent:FindFirstChild("Humanoid") then 
+			local EnemyHum = hit.Parent:FindFirstChild("Humanoid")
+			EnemyHum:TakeDamage(Damage)
+			Tool.ExplosionSound:Play()
+			Fireball:Destroy()
+
+		end
+	end)
+end)
