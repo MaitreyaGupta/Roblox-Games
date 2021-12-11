@@ -1,0 +1,19 @@
+local mouse=Player:GetMouse()
+local Player=game.Players.LocalPlayer
+local Character=Player.Character or Player.CharacterAdded:Wait() 
+local Humanoid=Character:WaitForChild("Humanoid") 
+local Animate
+
+mouse.KeyUp:Connect(function(input) 
+if input=="b" then 
+local Animation=Instance.new("Animation") 
+Animation.AnimationId="rbxid::/Yoour Animation Id"
+Animate=Humanoid:LoadAnimation(Animation)
+Animate:Play()
+end 
+end)
+mouse.KeyDown:Connect(function()
+if key=="b" then 
+Animate:Stop()
+end 
+end)
