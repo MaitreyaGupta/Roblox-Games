@@ -1,0 +1,26 @@
+local uis=game:GetService("UserInputService") 
+
+local player=game.Players.LocalPlayer
+
+local character=player.Character or player.CharacterAdded:Wait()
+local mouse=player:GetMouse()
+mouse.TargetFilter=character
+
+local debounce=false 
+
+uis.InputBegan:Connect(function(input,IsTyping )
+	if not IsTyping then 
+		if not debounce then 
+			
+			debounce=true 
+			
+			if input.KeyCode==Enum.KeyCode.Q then 
+				game.ReplicatedStorage.Fireball:FireServer()
+				
+			end
+			wait(0.1) 
+			debounce=false 
+			
+		end
+	end
+end)
