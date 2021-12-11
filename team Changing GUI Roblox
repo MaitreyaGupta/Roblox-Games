@@ -1,0 +1,9 @@
+local p=script.Parent.Parent.Parent.Parent.Parent.p
+
+script.Parent.MouseButton1Down:Connect(function(input)
+game.Players[p].TeamColor=BrickColor.new("Your desried team color") 
+game.Humanoid.Health[p]=0
+p.Parent.Parent.Parent.Enabled=true 
+
+end) 
+end 
