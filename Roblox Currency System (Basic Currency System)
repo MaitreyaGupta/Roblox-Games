@@ -1,0 +1,50 @@
+local currencyName = "Coins"
+local DataStore = game:GetService("DataStoreService"):GetDataStore("TestDataStore")
+game.Players.PlayerAdded:Connect(function(player)
+
+	local folder = Instance.new("Folder")
+	folder.Name = "leaderstats"
+	folder.Parent = player	
+	
+	local currency = Instance.new("IntValue")
+	currency.Name = currencyName
+	currency.Parent = folder
+	
+	local ID = currencyName.."-"..player.UserId
+	local savedData = nil	
+	
+	pcall(function()
+		savedData = DataStore:GetAsync(ID)
+	end)
+	
+	if savedData ~= nil then
+		currency.Value = savedData
+		print("Data loaded")
+	else
+		-- New player
+		currency.Value = 50
+		print("New player to the game")
+	end
+	
+	
+end)
+
+game.Players.PlayerRemoving:Connect(function(player)
+	local ID = currencyName.."-"..player.UserId
+	DataStore:SetAsync(ID,player.leaderstats[currencyName].Value)
+end)
+
+game:BindToClose(function()
+	
+	-- When game is ready to shutdown
+	
+	for i, player in pairs(game.Players:GetPlayers()) do
+		if player then
+			player:Kick("This game is shutting down")
+		end
+	end
+	
+	wait(5)	
+	
+end)
+ 
