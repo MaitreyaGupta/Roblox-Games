@@ -1,0 +1,25 @@
+local OneHundredcash=100
+local MarkteplaceService=game:getService("MarketplaceService")
+local DataStoreService=game:GetService("DataStoreService")
+
+local CurrencySystem="Coins"
+local PrevipousPurchase=DataStoreService:GetdataStore("PreviousPurchase") 
+
+
+MarkteplaceService.ProcessReciept=function(reciept) 
+	
+	local ID=reciept.PlayerId.."-"..reciept.PurchaseId
+	
+	if PrevipousPurchase:getaSync(ID) then 
+		return Enum.ProductPurchaseDecision.PurchaseGranted 
+	end
+	local player=game.Players:GetPlayerByUserId(reciept.PlayerId) 
+	
+	if not player then 
+		return Enum.ProductPurchaseDecision.NotProcessedYet
+	else 
+		if reciept.ProductId==OneHundredcash then
+			player.leaderstats[CurrencySystem].Value=player.leaderstats[CurrencySystem].Value+10
+		end
+	end
+end
